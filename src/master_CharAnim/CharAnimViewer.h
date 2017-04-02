@@ -20,6 +20,7 @@ public:
     int init();
     int render();
     int update( const float time, const float delta );
+	void applyCollide();
 
 
 protected:
@@ -35,6 +36,11 @@ protected:
 
 	void draw_skeleton(const Skeleton& );
 	void draw_particles();
+
+	chara::BVH iddle_bvh;
+	chara::BVH walk_bvh;
+	chara::BVH run_bvh;
+	chara::BVH kick_bvh;
 };
 
 

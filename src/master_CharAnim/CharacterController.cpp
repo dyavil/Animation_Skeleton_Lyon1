@@ -4,7 +4,7 @@
 CharacterController::CharacterController(){
 	//speed = Vector(0.f, 0.f, 0.f);
 	m_v = 0;
-	m_vMax = 3;
+	m_vMax = 1.5;
 	m_ch2w = Identity ();
 }
 
@@ -26,7 +26,8 @@ void CharacterController::turnXZ(const float& rot_angle_v){
 }
 
 void CharacterController::accelerate(const float& speed_inc){
-	if(m_v + speed_inc <= m_vMax) m_v += speed_inc;
+	m_v = m_v + speed_inc;
+	if(m_v > m_vMax) m_v =m_vMax;
 }
 
 void CharacterController::setVelocityMax(const float vmax){
@@ -48,5 +49,9 @@ const Point CharacterController::position() const{
 
 const Vector CharacterController::direction() const{
 	return m_ch2w(Vector(0, 0, 1));
+}
+
+void CharacterController::want_kick() {
+	m_v = 0;
 }
 

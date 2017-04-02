@@ -45,6 +45,12 @@ solution "gKit2light"
 		libdirs { "extern/mingw/lib" }
 		links { "mingw32", "SDL2main", "SDL2", "SDL2_image", "opengl32", "glew32" }
 
+	configuration { "windows", "gmake", "x64" }
+		buildoptions { "-std=c++11"}
+		includedirs { "extern/mingw/include" }
+		libdirs { "extern/mingw/lib" }
+		links { "mingw32", "SDL2main", "SDL2", "SDL2_image", "opengl32", "glew32" }
+
 	configuration { "windows", "codeblocks", "x32" }
 		buildoptions { "-std=c++11"}
 		includedirs { "extern/mingw/include" }

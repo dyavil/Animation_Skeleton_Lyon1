@@ -33,6 +33,12 @@ public:
 
    void setTransform(int i, Transform & t){m_joints[i].m_l2w = m_joints[i].m_l2w*t;}
 
+   friend void applyCollide();
+
+   friend float Distance(const Skeleton& a, const Skeleton& b);
+
+   friend int nextFrame(const chara::BVH& bvh, const chara::BVH& bvh2, int currentFrame);
+
    //! Positionne ce squelette dans la position n du BVH.
    //! Assez proche de la fonction récursive (question 1), mais range la matrice (Transform)
    //! dans la case du tableau. Pour obtenir la matrice allant de l'articulation local vers le monde,

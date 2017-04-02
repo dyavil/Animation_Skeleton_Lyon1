@@ -77,3 +77,17 @@ void Skeleton::setPose(const BVH& bvh, int frameNumber, Transform & tw)
 		else m_joints[i].m_l2w = tw;
 	}
 }
+
+
+
+float Distance(const Skeleton& a, const Skeleton& b) {
+	float res = 0.0;
+	if (a.numberOfJoint() != b.numberOfJoint()) return res;
+	//std::cout << "passed" << std::endl;
+	for (size_t i = 0; i < a.numberOfJoint(); i++)
+	{
+		res += distance(a.m_joints[i].m_l2w(Point(0, 0, 0)), b.m_joints[i].m_l2w(Point(0, 0, 0)));
+	}
+	return res;
+}
+

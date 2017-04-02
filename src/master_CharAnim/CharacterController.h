@@ -1,5 +1,6 @@
 #include "mat.h"
 #include "vec.h"
+#include "BVH.h"
 
 class CharacterController
 {
@@ -13,6 +14,8 @@ public:
 	void turnXZ(const float& rot_angle_v);
 	void accelerate(const float& speed_inc);
 	void setVelocityMax(const float vmax);
+	void want_iddle();
+	void want_kick();
 
 	void setPosition(const Point& p);
 	void setVelocityNorm(const float v);

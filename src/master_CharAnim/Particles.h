@@ -66,11 +66,15 @@ public:
     }
 
 	//! Collision with any other sphere of position p and radius 'radius'
-	void collision(const Point& p, const float radius);
-	//{
-	//	if (m_radius < 0) return;
-	//	if (... TODO
-	//}
+	void collision(const Point& p, const float radius, const Vector& direction)
+	{
+		if (m_radius < 0) return;
+		if (distance(m_p, p) < radius+m_radius) {
+			//std::cout << "collide" << std::endl;
+			m_v = m_v + direction;
+			m_v = m_v*1.1;
+		}
+	}
 
 	//! Apply gravity
     void computeParticleForceGravityEarth()
