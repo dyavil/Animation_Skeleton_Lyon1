@@ -33,7 +33,7 @@ public:
 
     Particle()
     {
-        m_mass = 1.0;      // 1kg
+        m_mass = 7.0;      // 1kg
 
 		m_radius = 10 + rand() % 5;
 
@@ -43,13 +43,27 @@ public:
 
     }
 
+    void setVal(Point pos, Vector dir, float rad){
+        m_radius = rad;
+        m_p = pos;
+        m_v = Vector(1, 0, 1)*dir;
+        m_v = m_v * 240;
+        //std::cout << m_v << dir << std::endl; 
+    }
+
+    float getRadius(){
+        return m_radius;
+    }
+
     void update(const float dt=0.1f)		// advect
     {
         if (m_mass>0)
         {
-            m_v = m_v + (dt/m_mass)*m_f;		 // mise à jour de la vitesse
+            m_v = m_v + (dt/m_mass)*m_f;
+            //std::cout << m_v << std::endl;		 // mise à jour de la vitesse
             m_p = m_p + dt*m_v;                  // mise à jour de la position
             m_f = Vector(0,0,0);
+            computeParticleForceGravityEarth();
         }
     }
 
@@ -71,8 +85,14 @@ public:
 		if (m_radius < 0) return;
 		if (distance(m_p, p) < radius+m_radius) {
 			//std::cout << "collide" << std::endl;
-			m_v = m_v + direction;
-			m_v = m_v*1.1;
+            float len = radius+m_radius - distance(m_p, p);
+            Vector t = direction*len;
+
+            
+			m_p = m_p + t;
+            m_v = m_v + direction;
+            m_v = m_v * 1.01;
+
 		}
 	}
 
@@ -111,6 +131,7 @@ public:
 
     std::size_t size() const { return m_part.size(); }
     void resize(int ns) { m_part.resize(ns); }
+    void push_back(Particle p){m_part.push_back(p);};
 
     void update(const float dt)
     {

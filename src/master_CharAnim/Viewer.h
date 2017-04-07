@@ -37,16 +37,20 @@ protected:
     Mesh m_cylinder_cover;
     Mesh m_cone;
     Mesh m_sphere;
+    Mesh m_bullet;
 
     void init_cone();
     void init_cylinder();
     void init_sphere();
+    void init_bullet();
 
     void draw_cylinder(const Transform& T);
     void draw_cone(const Transform& T);
 	void draw_sphere(const Transform& T);
+    void draw_bullet(const Transform& T);
 	void draw_cylinder(const Point& a, const Point& b, float r=1.f);
 	void draw_sphere(const Point& a, float r = 1.f);
+    void draw_bullet(const Point& a, float r = 1.f);
 };
 
 

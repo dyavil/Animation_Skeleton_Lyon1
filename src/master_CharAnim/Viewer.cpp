@@ -33,7 +33,7 @@ void Viewer::init_sphere()
 
     m_sphere = Mesh(GL_TRIANGLE_STRIP);
 
-    m_sphere.color( Color(1, 1, 1) );
+    m_sphere.color( Color(0.8, 0.8, 0.8) );
 
     for(i=0;i<divAlpha;++i)
     {
@@ -55,6 +55,41 @@ void Viewer::init_sphere()
         }
 
         m_sphere.restart_strip();
+    }
+}
+
+
+void Viewer::init_bullet()
+{
+    const int divBeta = 26;
+    const int divAlpha = divBeta/2;
+    int i,j;
+    float beta, alpha, alpha2;
+
+    m_bullet = Mesh(GL_TRIANGLE_STRIP);
+
+    m_bullet.color( Color(1, 0, 0.4) );
+
+    for(i=0;i<divAlpha;++i)
+    {
+        alpha = -0.5f*M_PI + float(i)*M_PI/divAlpha;
+        alpha2 = -0.5f*M_PI + float(i+1)*M_PI/divAlpha;
+
+        for(j=0;j<divBeta;++j)
+        {
+            beta = float(j)*2.f*M_PI/(divBeta-1);
+
+            m_bullet.texcoord(beta/(2.0f*M_PI), 0.5f+alpha/M_PI);
+            m_bullet.normal( Vector(cos(alpha)*cos(beta),  sin(alpha), cos(alpha)*sin(beta)) );
+            m_bullet.vertex( Point(cos(alpha)*cos(beta),  sin(alpha), cos(alpha)*sin(beta)) );
+
+
+            m_bullet.texcoord(beta/(2.0f*M_PI), 0.5f+alpha2/M_PI);
+            m_bullet.normal( Vector(cos(alpha2)*cos(beta),  sin(alpha2), cos(alpha2)*sin(beta)) );
+            m_bullet.vertex( Point(cos(alpha2)*cos(beta),  sin(alpha2), cos(alpha2)*sin(beta))   );
+        }
+
+        m_bullet.restart_strip();
     }
 }
 
@@ -104,6 +139,7 @@ void Viewer::init_cylinder()
     float step = 2.0*M_PI / (div);
 
     m_cylinder = Mesh(GL_TRIANGLE_STRIP);
+    m_cylinder.color(Color(0.9, 0.5, 0.1));
 
     for (i=0;i<=div;++i)
     {
@@ -184,6 +220,19 @@ void Viewer::draw_sphere(const Transform& T)
 }
 
 
+void Viewer::draw_bullet(const Point& a, float r)
+{
+    draw_bullet(Translation(Vector(a))*Scale(r, r, r));
+}
+
+
+
+void Viewer::draw_bullet(const Transform& T)
+{
+    gl.model(T);
+    gl.draw(m_bullet);
+}
+
 
 
 int Viewer::render()
@@ -209,6 +258,7 @@ int Viewer::init()
     init_cylinder();
     init_cone();
     init_sphere();
+    init_bullet();
 
     return 1;
 }

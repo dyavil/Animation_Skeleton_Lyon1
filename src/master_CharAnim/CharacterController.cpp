@@ -55,3 +55,7 @@ void CharacterController::want_kick() {
 	m_v = 0;
 }
 
+float CharacterController::velocity() const {
+	return m_v;
+}
+

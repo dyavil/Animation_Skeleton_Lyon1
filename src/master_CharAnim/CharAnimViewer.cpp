@@ -27,9 +27,9 @@ int CharAnimViewer::init()
 
 	m_part.resize( 10 );
 
-
     init_cylinder();
     init_sphere();
+    init_bullet();
 
 
     //m_bvh.init("data/bvh/Robot.bvh" );
@@ -108,6 +108,7 @@ int CharAnimViewer::render()
 
     draw_particles();
     draw_quad( RotationX(-90)*Scale(500,500,1) );
+    draw_bullets();
 
 	// Affiche le skeleton
     draw_skeleton( m_ske );
@@ -126,6 +127,7 @@ int CharAnimViewer::update( const float time, const float delta )
 	static bool walk = false;
 	static bool kick = false;
 	static float oldtime = time;
+	static float shotoldtime = time;
 	static Point oldPosition = controller.position();
 	if (!j && !run  && !kick && m_frameNumber >= m_bvh.getNumberOfFrame() - 1) {
 		m_frameNumber = 0;
@@ -136,7 +138,7 @@ int CharAnimViewer::update( const float time, const float delta )
 	}
 	if (kick && m_frameNumber >= kick_bvh.getNumberOfFrame() - 2) {
 		kick = false;
-		cout << endl << time << " , " << delta << endl;
+		//cout << endl << time << " , " << delta << endl;
 		m_frameNumber = 0;
 	}
 	if (run && !kick && m_frameNumber >= run_bvh.getNumberOfFrame() - 2) {
@@ -147,13 +149,25 @@ int CharAnimViewer::update( const float time, const float delta )
 		m_frameNumber = 0;
 	}
 
+
+	if (key_state('n')){
+		if ((time - shotoldtime) > 100) {
+			draw_bullett(controller.position(), controller.direction()*controller.velocity());
+			shotoldtime = time;
+		}
+		
+
+	}
+
     if (key_state('z') && !kick){
 		if (key_state('e') && !run && !kick)
 		{
 			
 			run = true;
 			controller.setVelocityMax(5);
+			//cout << endl << m_frameNumber << endl;
 			m_frameNumber = nextFrame(walk_bvh, run_bvh, m_frameNumber);
+			//cout << endl << m_frameNumber << endl;
 			controller.accelerate(0.1);
 			controller.update(0.1f);
 		}
@@ -175,6 +189,7 @@ int CharAnimViewer::update( const float time, const float delta )
 			}
 		}
 	}
+	
 	else walk = false;
 	if (key_state('x') && !kick)
 	{
@@ -196,13 +211,15 @@ int CharAnimViewer::update( const float time, const float delta )
 		m_frameNumber = 0;
 	}
 	if(walk || run || kick) j = false;
-    for (int i = 0; i < m_ske.numberOfJoint(); ++i)
+
+    /*for (int i = 0; i < m_ske.numberOfJoint(); ++i)
     {
         
         m_ske.setTransform(i, controller.getTrans());
     }
-	if (key_state('n')) { m_frameNumber++; cout << m_frameNumber << endl; }
-	if (key_state('b')) { m_frameNumber--; cout << m_frameNumber << endl; }
+    */
+	/*if (key_state('n')) { m_frameNumber++; cout << m_frameNumber << endl; }
+	if (key_state('b')) { m_frameNumber--; cout << m_frameNumber << endl; }*/
 
     Transform t = Vector(0, 50, 0)*controller.getTrans();
 	if (!kick && j && !run && !walk && m_frameNumber < iddle_bvh.getNumberOfFrame() - 1) {
@@ -243,6 +260,7 @@ int CharAnimViewer::update( const float time, const float delta )
 	}
 
     m_part.update(0.02f);
+    bullets.update(0.02f);
 	applyCollide();
 
 	if (distance(oldPosition, controller.position()) > 0.0) {
@@ -263,4 +281,24 @@ void CharAnimViewer::draw_particles()
 		if (m_part[i].radius()>0)
 			draw_sphere( m_part[i].position(), m_part[i].radius() );
     }
+}
+
+void CharAnimViewer::draw_bullets()
+{
+    int i;
+    for(i=0;i<bullets.size();++i)
+    {
+		if (bullets[i].radius()>0)
+			draw_bullet( bullets[i].position(), bullets[i].radius() );
+    }
+}
+
+
+Particle & CharAnimViewer::draw_bullett(Point position, Vector dir)
+{
+	Particle bullet;
+	bullet.setVal(position+Vector(0, 70, 0), dir, 5.0);
+	draw_bullet( position+Vector(0, 70, 0), 5.0);
+	bullets.push_back(bullet);
+	return bullet;
 }

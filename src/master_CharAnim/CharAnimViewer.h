@@ -21,6 +21,8 @@ public:
     int render();
     int update( const float time, const float delta );
 	void applyCollide();
+    Particle & draw_bullett(Point position, Vector dir);
+    void draw_bullets();
 
 
 protected:
@@ -31,6 +33,8 @@ protected:
     Skeleton m_ske;
 
     Particles m_part;
+
+    Particles bullets;
 
     CharacterController controller;
 

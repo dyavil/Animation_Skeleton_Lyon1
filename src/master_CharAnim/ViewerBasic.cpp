@@ -139,7 +139,7 @@ void ViewerBasic::init_cube()
 void ViewerBasic::init_quad()
 {
     m_quad = Mesh(GL_TRIANGLE_STRIP);
-    m_quad.color( Color(1, 1, 1));
+    m_quad.color( Color(0.1, 0.9, 0.1));
 
     m_quad.normal(  0, 0, 1 );
 
